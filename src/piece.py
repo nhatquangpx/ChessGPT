@@ -1,4 +1,4 @@
-
+import os
 class Piece:
 
     def __init__(self, name, color, value, texture = None, texture_rect = None):
@@ -12,9 +12,9 @@ class Piece:
         self.set_texture()
         self.texture_rect = texture_rect
     
-    def set_texture(self):
+    def set_texture(self, size = 120):
         self.texture = os.path.join(
-            f'assets/{self.color}_{self.name}.png')
+            f'assets/imgs-{size}px/{self.color}_{self.name}.png')
         
     def add_moves(self, moves):
         self.moves.append(moves)
@@ -25,7 +25,7 @@ class Pawn(Piece):
     def __init__(self, color):
 
         self.dir = -1 if color == 'white' else 1
-        super().__init__('pawn','color',1.0)
+        super().__init__('pawn', color ,1.0)
 
 class Knight(Piece):
 
