@@ -15,6 +15,22 @@ class Board:
         '''
         Calculate all possible moves for a piece at a given position.'
         '''
+
+        def pawn_moves():
+            #steps
+            steps = 1 if piece.moved else 2
+
+            #vertical moves
+            start = row + piece.dir
+            end = row + (piece.dir * (1 + steps))
+            for move_row in range(start, end, piece.dir):
+                if Square.in_range(move_row):
+                    if self.squares[move_row][col].isempty():
+                        #
+
+            #diagonal moves
+
+
         def knight_moves():
             #8 possible moves for knight
             possible_moves = [
@@ -40,23 +56,17 @@ class Board:
                         
 
         if isinstance(piece, Pawn):
-            pass
-
+            pawn_moves()
         elif isinstance(piece, Knight):
             knight_moves()
-
         elif isinstance(piece, Bishop):
             pass
-
         elif isinstance(piece, Rook):
             pass
-
         elif isinstance(piece, Queen):
             pass
-
         elif isinstance(piece, King):
             pass
-
 
     def _create(self):
         self.squares = [[0, 0, 0, 0, 0, 0, 0, 0] for col in range(COLS)]
