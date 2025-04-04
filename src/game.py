@@ -2,6 +2,7 @@ import pygame
 from board import Board
 from const import *
 from dragger import Dragger
+
 class Game:
     def __init__(self):
         self.board = Board()

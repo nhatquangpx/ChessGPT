@@ -44,7 +44,7 @@ class Board:
                 possible_move_row, possible_move_col = possible_move
 
                 if Square.in_range(possible_move_row, possible_move_col):
-                    if self.squares[possible_move_row][possible_move_col].isempty_or_rival(piece.color):
+                    if self.squares[possible_move_row][possible_move_col].isempty_or_enemy(piece.color):
                         #create square of the new move
                         initial = Square(row,col)
                         final = Square(possible_move_row, possible_move_col) #piece = piece
@@ -52,7 +52,25 @@ class Board:
                         move = Move(initial, final)
                         #append new valid move
                         piece.add_move(move)
-                        
+                    #blocked
+                    else: break
+                #not in range
+                else: break
+
+                #diagonal moves
+                possible_move_row = row + piece.dir
+                possible_move_cols = [col - 1, col + 1]
+                for possible_move_col in possible_move_cols:
+                    if Square.in_range(possible_move_row, possible_move_col):
+                        if self.squares[possible_move_row][possible_move_col].has_enemy_piece(piece.color):
+                            #create square of the new move
+                            initial = Square(row,col)
+                            final = Square(possible_move_row, possible_move_col)
+                            #Create a new move
+                            move = Move(initial, final)
+                            #append new valid move
+                            piece.add_move(move)
+
                         
 
         if isinstance(piece, Pawn):
