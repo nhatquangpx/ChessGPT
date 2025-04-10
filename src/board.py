@@ -23,12 +23,33 @@ class Board:
             #vertical moves
             start = row + piece.dir
             end = row + (piece.dir * (1 + steps))
-            for move_row in range(start, end, piece.dir):
-                if Square.in_range(move_row):
-                    if self.squares[move_row][col].isempty():
-                        #
+            for possible_move_row in range(start, end, piece.dir):
+                if Square.in_range(possible_move_row):
+                    if self.squares[possible_move_row][col].isempty():
+                        #create initial and final squares of the new move
+                        initial = Square(row,col)
+                        final = Square(possible_move_row, col)
+                        #create new move
+                        move = Move(initial, final)
+                        piece.add_move(move)
+                    #blocked
+                    else: break
+                #not in range
+                else: break
 
             #diagonal moves
+            possible_move_row = row + piece.dir
+            possible_move_cols = [col - 1, col + 1]
+            for possible_move_col in possible_move_cols:
+                if Square.in_range(possible_move_row, possible_move_col):
+                    if self.squares[possible_move_row][possible_move_col].has_enemy_piece(piece.color):
+                        #create square of the new move
+                        initial = Square(row,col)
+                        final = Square(possible_move_row, possible_move_col)
+                        #Create a new move
+                        move = Move(initial, final)
+                        #append new valid move
+                        piece.add_move(move)
 
 
         def knight_moves():
@@ -50,39 +71,70 @@ class Board:
                         final = Square(possible_move_row, possible_move_col) #piece = piece
                         #create new move
                         move = Move(initial, final)
-                        #append new valid move
+
+                        #check potential checks
+                        # if bool:
+                        #     if not self.in_check(piece, move):
+                        #         # append new move
+                        #         piece.add_move(move)
+                        #     else: break
+                        # else:
+                        #     # append new move
+                        piece.add_move(move)             
+
+        def straightline_moves(incrs):
+            for incr in incrs:
+                row_incr, col_incr = incr
+                possible_move_row = row + row_incr
+                possible_move_col = col + col_incr
+                
+                #While true
+                if Square.in_range(possible_move_row, possible_move_col):
+                    #create square of the new move
+                    initial = Square(row,col)
+                    final = Square(possible_move_row, possible_move_col)
+                    #create new move
+                    move = Move(initial, final)
+
+                    #empty
+                    if self.squares[possible_move_row][possible_move_col].isempty():
                         piece.add_move(move)
-                    #blocked
-                    else: break
-                #not in range
-                else: break
 
-                #diagonal moves
-                possible_move_row = row + piece.dir
-                possible_move_cols = [col - 1, col + 1]
-                for possible_move_col in possible_move_cols:
-                    if Square.in_range(possible_move_row, possible_move_col):
-                        if self.squares[possible_move_row][possible_move_col].has_enemy_piece(piece.color):
-                            #create square of the new move
-                            initial = Square(row,col)
-                            final = Square(possible_move_row, possible_move_col)
-                            #Create a new move
-                            move = Move(initial, final)
-                            #append new valid move
-                            piece.add_move(move)
-
-                        
+                    #has enemy piece
+                    if self.squares[possible_move_row][possible_move_col].has_enemy_piece(piece.color):
+                        piece.add_move(move)
+                        break
 
         if isinstance(piece, Pawn):
             pawn_moves()
         elif isinstance(piece, Knight):
             knight_moves()
         elif isinstance(piece, Bishop):
-            pass
+            straightline_moves([
+                (-1, -1), #up-left
+                (-1, 1), #up-right
+                (1, -1), #down-left
+                (1, 1) #down-right
+            ])
+
         elif isinstance(piece, Rook):
-            pass
+            straightline_moves([
+                (-1, 0), #up
+                (1, 0), #down
+                (0, -1), #left
+                (0, 1) #right
+            ])
         elif isinstance(piece, Queen):
-            pass
+            straightline_moves([
+                (-1, -1), #up-left
+                (-1, 1), #up-right
+                (1, -1), #down-left
+                (1, 1), #down-right
+                (-1, 0), #up
+                (1, 0), #down
+                (0, -1), #left
+                (0, 1) #right
+            ])
         elif isinstance(piece, King):
             pass
 
