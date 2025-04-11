@@ -6,11 +6,30 @@ class Board:
 
     def __init__(self):
         self.squares = [[0, 0, 0, 0, 0, 0, 0, 0] for col in range(COLS)]
-
+        self.last_move = None
         self._create()
         self._add_pieces('white')
         self._add_pieces('black')
 
+    def move(self, piece, move):
+        initial = move.initial
+        final = move.final
+
+        #console board move update
+        self.squares[initial.row][initial.col].piece = None
+        self.squares[final.row][final.col].piece = piece
+
+        #move
+        piece.moved = True
+
+        #clear valid moves
+        piece.clear_moves()
+
+        #set last move
+        self.last_move = move
+
+    def valid_moves(self, piece, move):
+        return move in piece.moves
     def calc_moves(self, piece, row, col):
         '''
         Calculate all possible moves for a piece at a given position.'
@@ -190,6 +209,7 @@ class Board:
         for row in range(ROWS):
             for col in range(COLS):
                 self.squares[row][col] = Square(row, col)
+    
     def _add_pieces(self, color):
         row_pawn, row_other = (6, 7) if color == 'white' else (1, 0)
 
