@@ -71,13 +71,15 @@ class Main:
                         move = Move(initial, final)
                         
                         if board.valid_moves(dragger.piece, move):
-                            #move piece
+                            # normal capture
+                            captured = board.squares[released_row][released_col].has_piece()
                             board.move(dragger.piece, move)
-                            dragger.update_mouse(event.pos)
-                            
-                            #show methods
+
+                            board.set_true_en_passant(dragger.piece)                            
+
+                            # show methods
                             game.show_bg(screen)
-                            game.show_moves(screen)
+                            game.show_last_move(screen)
                             game.show_pieces(screen)
                         #undrag piece
                     dragger.undrag_piece()
