@@ -28,7 +28,7 @@ class Board:
         #set last move
         self.last_move = move
 
-    def valid_moves(self, piece, move):
+    def valid_move(self, piece, move):
         return move in piece.moves
     def calc_moves(self, piece, row, col):
         '''

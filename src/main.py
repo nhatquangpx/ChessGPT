@@ -70,21 +70,15 @@ class Main:
                         final = Square(released_row, released_col)
                         move = Move(initial, final)
                         
-                        if board.valid_moves(dragger.piece, move):
-                            # normal capture
-                            captured = board.squares[released_row][released_col].has_piece()
+                        if board.valid_move(dragger.piece, move):
+                            #move piece
                             board.move(dragger.piece, move)
-
-                            board.set_true_en_passant(dragger.piece)                            
-
-                            # show methods
+                            
+                            #show methods
                             game.show_bg(screen)
-                            game.show_last_move(screen)
                             game.show_pieces(screen)
                         #undrag piece
                     dragger.undrag_piece()
-
-
 
                 #quit application    
                 if event.type == pygame.QUIT:
